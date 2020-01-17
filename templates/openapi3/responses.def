@@ -5,7 +5,7 @@
 {{~}}
 
 {{? data.responseSchemas }}
-> Example responses
+> Примеры ответов
 
 {{= data.utils.getResponseExamples(data) }}
 {{?}}
@@ -13,9 +13,9 @@
 {{= data.tags.section }}
 <h3 id="{{=data.operationUniqueSlug}}-responses">Responses</h3>
 
-|Status|Meaning|Description|Schema|
+|Код|Http статус|Описание|Схема|
 |---|---|---|---|
-{{~ data.responses :r}}|{{=r.status}}|{{=r.meaning}}|{{=r.description || 'none'}}|{{=r.schema}}|
+{{~ data.responses :r}}|{{=r.status}}|{{=r.meaning}}|{{=r.description || 'none'}}|Схема '{{=r.schema}}'|
 {{~}}
 
 {{ data.responseSchemas = false; }}

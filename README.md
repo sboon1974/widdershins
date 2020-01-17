@@ -1,3 +1,8 @@
+# ismp.crpt.ru
+
+node widdershins --search false --language_tabs 'shell:curl' --expandBody true  --summary ismp-api.yaml -o b.md
+
+
 # widdershins
 OpenAPI / Swagger / AsyncAPI / Semoasa definition to [Slate](https://github.com/lord/slate) /
 [Shins](https://github.com/mermade/shins) compatible markdown

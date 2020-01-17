@@ -3,14 +3,12 @@
 {{= data.tags.section }}
 <h1 id="{{=data.title_prefix}}">{{=data.api.info && data.api.info.title}} {{=data.version}}</h1>
 
-> Scroll down for {{? data.header.language_tabs.length}}code samples, {{?}}example requests and responses.{{? data.header.language_tabs.length}} Select a language for code samples from the tabs above or the mobile navigation menu.{{?}}
-
 {{? data.api.info && data.api.info.description}}{{=data.api.info.description}}{{?}}
 
 {{? data.api.servers }}
-Base URLs:
+Базовые URLs:
 {{~data.api.servers :s}}
-* <a href="{{=s.url}}">{{=s.url}}</a>
+* <a href="{{=s.url}}">{{=s.url}}</a> - {{=s.description}}
 {{ for(var v in s.variables) { }}
     * **{{=v}}** - {{=s.variables[v].description||''}} Default: {{=s.variables[v].default}}
 {{? s.variables[v].enum}}
@@ -57,28 +55,18 @@ Base URLs:
 {{? data.api.components && data.api.components.schemas }}
 {{= data.tags.section }}
 
-# Schemas
+# Схемы
 
 {{ for (var s in data.components.schemas) { }}
 {{ var origSchema = data.components.schemas[s]; }}
 {{ var schema = data.api.components.schemas[s]; }}
 
 {{= data.tags.section }}
-<h2 id="tocS_{{=s}}">{{=s}}</h2>
 <!-- backwards compatibility -->
-<a id="schema{{=s.toLowerCase()}}"></a>
+<a id="schema{{=s.toLowerCase().replace(" ", "")}}"><h2 id="tocS_{{=s.replace(" ", "")}}">Схема '{{=s}}'</h2></a>
 <a id="schema_{{=s}}"></a>
 <a id="tocS{{=s.toLowerCase()}}"></a>
 <a id="tocs{{=s.toLowerCase()}}"></a>
-
-{{? data.options.yaml }}
-```yaml
-{{=data.utils.yaml.stringify(data.utils.getSample(schema,data.options,{quiet:true},data.api))}}
-{{??}}
-```json
-{{=data.utils.safejson(data.utils.getSample(schema,data.options,{quiet:true},data.api),null,2)}}
-{{?}}
-```
 
 {{ var enums = []; }}
 {{ var blocks = data.utils.schemaToArray(origSchema,-1,{trim:true,join:true},data); }}
@@ -93,6 +81,16 @@ Base URLs:
    }
 }}
 
+{{? origSchema.type == 'object' }}
+{{? data.options.yaml }}
+```yaml
+{{=data.utils.yaml.stringify(data.utils.getSample(schema,data.options,{quiet:true},data.api))}}
+{{??}}
+```json
+{{=data.utils.safejson(data.utils.getSample(schema,data.options,{quiet:true},data.api),null,2)}}
+{{?}}
+```
+
 {{~ blocks :block}}
 {{? block.title }}{{= block.title}}{{= '\n\n'}}{{?}}
 {{? block.externalDocs}}
@@ -102,12 +100,12 @@ Base URLs:
 {{? block===blocks[0] }}
 {{= data.tags.section }}
 
-### Properties
+### Атрибуты
 {{?}}
 
-{{? block.rows.length}}|Name|Type|Required|Restrictions|Description|
+{{? block.rows.length}}|Наименование|Тип|Обязательный|Доступ|Описание|
 |---|---|---|---|---|{{?}}
-{{~ block.rows :p}}|{{=p.displayName}}|{{=p.safeType}}|{{=p.required}}|{{=p.restrictions||'none'}}|{{=p.description||'none'}}|
+{{~ block.rows :p}}|{{=p.displayName}}|{{=p.safeType}}|{{? p.required}}Да{{??}}Нет{{?}}|{{=p.restrictions||'нет'}}|{{=p.description||'none'}}|
 {{~}}
 {{~}}
 {{? (blocks[0].rows.length === 0) && (blocks.length === 1) }}
@@ -130,9 +128,17 @@ Base URLs:
 {{= data.tags.endSection }}
 {{= data.tags.endSection }}
 
+{{??}}
+### Тип:
+enum
+### Значения
+{{=origSchema.description}}
+{{?}}
+
 {{ } /* of schemas */ }}
 
 {{?}}
+
 
 {{#def.footer}}
 
