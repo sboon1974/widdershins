@@ -9,21 +9,23 @@
 
 {{= data.utils.getResponseExamples(data) }}
 {{?}}
-
+{{? data.responses.length > 1 }}
 {{= data.tags.section }}
-<h3 id="{{=data.operationUniqueSlug}}-responses">Responses</h3>
+<h3 id="{{=data.operationUniqueSlug}}-responses">Ответ</h3>
 
 |Код|Http статус|Описание|Схема|
 |---|---|---|---|
 {{~ data.responses :r}}|{{=r.status}}|{{=r.meaning}}|{{=r.description || 'none'}}|Схема '{{=r.schema}}'|
 {{~}}
 
-{{ data.responseSchemas = false; }}
+{{?}}
+
+{{ data.responseSchemas = true; }}
 {{~ data.responses :response }}
 {{ if (response.content && !response.$ref && !data.utils.isPrimitive(response.type)) data.responseSchemas = true; }}
 {{~}}
 {{? data.responseSchemas }}
-<h3 id="{{=data.operationUniqueSlug}}-responseschema">Response Schema</h3>
+<h3 id="{{=data.operationUniqueSlug}}-responseschema">Схема успешного ответа</h3>
 {{~ data.responses :response}}
 {{? response.content && !response.$ref && !data.utils.isPrimitive(response.type)}}
 {{? Object.keys(response.content).length }}
@@ -43,7 +45,6 @@
 }}
 
 {{? blocks[0].rows.length || blocks[0].title }}
-Status Code **{{=response.status}}**
 
 {{~ blocks :block}}
 {{? block.title }}*{{=block.title}}*

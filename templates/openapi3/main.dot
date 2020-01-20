@@ -62,11 +62,9 @@
 {{ var schema = data.api.components.schemas[s]; }}
 
 {{= data.tags.section }}
-<!-- backwards compatibility -->
+
 <a id="schema{{=s.toLowerCase().replace(" ", "")}}"><h2 id="tocS_{{=s.replace(" ", "")}}">Схема '{{=s}}'</h2></a>
-<a id="schema_{{=s}}"></a>
-<a id="tocS{{=s.toLowerCase()}}"></a>
-<a id="tocs{{=s.toLowerCase()}}"></a>
+
 
 {{ var enums = []; }}
 {{ var blocks = data.utils.schemaToArray(origSchema,-1,{trim:true,join:true},data); }}
@@ -129,6 +127,7 @@
 {{= data.tags.endSection }}
 
 {{??}}
+{{? block.title }}{{= block.title}}{{= '\n\n'}}{{?}}
 ### Тип:
 enum
 ### Значения
